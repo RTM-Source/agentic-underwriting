@@ -1,0 +1,40 @@
+{
+  "community": "Aster Ridge",
+  "sourcePath": "<temp>\\aster-ridge-prepped-source.xlsx",
+  "dealFolder": "<repo-root>\\Investments\\Data\\Transactions\\Aster Ridge (Demo)\\Rent Roll",
+  "unitsCsvPath": "<temp>\\aster-ridge-units.csv",
+  "version": 1,
+  "headerRow": 13,
+  "blockStart": 44,
+  "unitRowFirst": 15,
+  "unitRowLast": 195,
+  "colMap": { "unit": "A", "market": "V", "actual": "Z", "moveIn": "N", "secOcc": "AG", "care": "AI" },
+  "careLevels": ["IL", "AL", "MC"],
+  "daysInPeriod": 30,
+  "deprorate": false,
+  "operatorTotals": { "market": 417370.00, "actual": 371055.00, "care": 45660.00, "secOcc": 7960.00, "units": 86, "apartments": 84 },
+  "tiers": [
+    { "group": "IL | Studio | A", "sqfts": [420] },
+    { "group": "IL | 1BR | A",    "sqfts": [610] },
+    { "group": "IL | 2BR | A",    "sqfts": [850] },
+    { "group": "AL | Studio | A", "sqfts": [380] },
+    { "group": "AL | 1BR | A",    "sqfts": [540] },
+    { "group": "MC | Semi-Private", "label": "MC - Semi-Private", "structure": "semi" },
+    { "group": "MC | Private",      "label": "MC - Private" }
+  ],
+  "moveInWindows": [
+    { "start": "2026-01-01", "end": "2026-06-30" },
+    { "start": "2026-04-01", "end": "2026-06-30" }
+  ],
+  "notes": [
+    "1. SYNTHETIC DEMO DATA: Aster Ridge is a fully fictional community built to exercise the .RR pipeline; every unit, resident and dollar figure is fabricated (raw export row 5 carries the same disclaimer). No broker/operator follow-up applies.",
+    "2. Two MC Semi-Private apartments (313, 314; rows 191-192 and 194-195) are TRUE companion rooms - both beds carry full independent Market/Actual/Care charges (not a 2nd-occupant fee-fold like the IL/AL couples). The raw export's second bed is a blank-Unit-code continuation line (OneSite prints the door number only on the first bed's row), so the build's copy of the source (not the operator original) had Unit column A pre-filled on rows 192 -> \"313\" and 195 -> \"314\" - mirroring the primary bed's own door number - purely so the #Apts dedup formula can recognize both beds as one door. No dollar figure was touched; this is documented here for full transparency. PROPOSED - confirm acceptable.",
+    "3. MC occupancy has two valid readings that intentionally disagree: bed-based Occupied Units (the engine's native, rule-1 unit=bed=contract metric) = 15 of 16 beds (12 Private beds, 1 vacant at unit 308, + 4 Semi-Private beds, all occupied). Apartment/door-based occupancy (matching the fabricator-verified 'MC 13' figure) = 13 of 14 doors (11 occupied Private doors + 2 fully-occupied Semi-Private doors). Both are internally consistent; the summary's native Occ Units column reports the bed figure (15) per the skill's standard contract, and this note exists so the 13-vs-15 gap is never mistaken for an error.",
+    "4. Tiering (rule 9, two-pass method): every IL/AL unit type in this rent roll has exactly ONE distinct SqFt (Studio-420/610-1BR/850-2BR for IL; Studio-380/540-1BR for AL) - there is no SqFt spread to cluster, so each type collapses to a single tier 'A' with no B/C. PROPOSED - trivial by construction, but flagged per rule 9 for underwriter confirmation rather than silently assumed.",
+    "5. De-proration (rule 11) is OFF for this export: recent move-ins dated mid-month (e.g. unit 106 IL, moved in 4/8/2026; unit 302 MC, moved in 6/12/2026) already post the FULL un-prorated Actual Rent in the raw Actual column, exactly like the prior OneSite-family precedent - grossing them up again would double-count. Verified: raw AQ198 grand TOTAL = $424,675.00 (= sum of raw Actual Rent + Care Fees + 2nd-Occupant Fee across all leaf lines) ties exactly to Built In-Place Rent + Built In-Place Care + Built 2nd-Occ Fee with deprorate=false, confirming no adjustment is needed.",
+    "6. AL care charges (Level 1 $595 / Level 2 $1,095 / Level 3 $1,595) and MC flat care ($1,200/resident) are read directly from the raw Care Fees column (AI) per resident - no derivation needed, the operator export already carries the dollar amount.",
+    "7. No turnovers, no Inactive-Down units, and no Actual-above-Market lines were found anywhere in the export (scanned all 84 apartments / 94 detail lines) - a clean data set as expected for a fabricated demo file.",
+    "8. NMI Rent (blue, engine-proposed per rule 18) is auto-computed by the engine at ~4.5% above each tier's In-Place (Occ), rounded to end in 95 - underwriter may override per tier.",
+    "9. ENGINE GAP (flagged for maintainers, not a deal-specific judgment call): the raw OneSite export is legacy .xls (BIFF) format; Invoke-RRBuild's Copy-Item step preserves file bytes verbatim but names the building-marker file .xlsx (per rule 21), and Excel COM refuses to Open a byte-for-byte .xls file under a .xlsx name ('file format or file extension is not valid'). Worked around outside the engine: the .xls source was pre-converted to true .xlsx format in %TEMP% (SaveAs, non-OneDrive path, hook-compliant) before being handed to Invoke-RRBuild as sourcePath - no dollar values touched, only the container format. Every prior proven OneSite source (the two prior OneSite-family communities) is also .xls, so this will recur on the next raw .xls deal; RR-Build-Lib.ps1 was not modified for this build."
+  ]
+}

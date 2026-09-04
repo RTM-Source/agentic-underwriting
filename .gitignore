@@ -1,0 +1,10 @@
+# Office lock/temp files
+~$*
+*.tmp
+
+# Local Claude Code settings (machine-specific permissions)
+.claude/settings.local.json
+.claude/worktrees/
+
+# Decks are excluded from version control
+*.pptx
